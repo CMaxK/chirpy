@@ -6,30 +6,31 @@ import (
 )
 
 func main() {
+	const filepathRoot = "."
 	const port = "8080"
+
 	mux := http.NewServeMux()
-	files := http.FileServer(http.Dir("."))
-	mux.Handle("/", files)
+	// Serve files from the '.' directory at the '/app/' path, after stripping the '/app' prefix from the request path.
+	//eg "/app/assets/logo.png" would serve the file at "./assets/logo.png".
+	mux.Handle("/app/", http.StripPrefix("/app", http.FileServer(http.Dir(filepathRoot))))
+	// Handle requests to /healthz path
+	mux.HandleFunc("/healthz", handlerReadiness)
+
+	// Serves headers
 	corsMux := middlewareCors(mux)
 
 	srv := &http.Server{
-		Addr:	":" + port,
+		Addr:    ":" + port,
 		Handler: corsMux,
 	}
 
-	log.Printf("Serving on port: %s\n", port)
+	log.Printf("Serving files from %s on port: %s\n", filepathRoot, port)
 	log.Fatal(srv.ListenAndServe())
 }
 
-func middlewareCors(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Access-Control-Allow-Origin", "*")
-		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE")
-		w.Header().Set("Access-Control-Allow-Headers", "*")
-		if r.Method == "OPTIONS" {
-			w.WriteHeader(http.StatusOK)
-			return
-		}
-		next.ServeHTTP(w, r)
-	})
+// Responds to HTTP requests with status code 200 and a 'Content-Type' header set to 'text/plain'
+func handlerReadiness(w http.ResponseWriter, r *http.Request) {
+	w.Header().Add("Content-Type", "text/plain; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte(http.StatusText(http.StatusOK)))
 }
