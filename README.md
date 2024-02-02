@@ -1,6 +1,6 @@
 # chirpy
 
-Simple web server to host html content
+Web server that mimics "twitter" functionality with CRUD operations for messages
 
 ## To run:
 
