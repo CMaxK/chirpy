@@ -3,6 +3,9 @@ package main
 import (
 	"log"
 	"net/http"
+	"flag"
+	"os"
+	"fmt"
 
 	"github.com/CMaxK/chirpy/database"
 	"github.com/go-chi/chi/v5"
@@ -16,6 +19,17 @@ type apiConfig struct {
 func main() {
 	const filepathRoot = "."
 	const port = "8080"
+
+	//for use with debug flag eg. go build -o out && ./out --debug
+	dbg := flag.Bool("debug", false, "Enable debug mode")
+	flag.Parse()
+	if *dbg {
+    err := os.Remove("database.json")
+    if err != nil {
+        log.Fatalf("Failed to delete the database: %s", err)
+    }
+    fmt.Println("Database deleted")
+	}
 
 	db, err := database.NewDB("database.json")
 	if err != nil {
@@ -35,6 +49,7 @@ func main() {
 	apiRouter := chi.NewRouter()
 	apiRouter.Get("/healthz", handlerReadiness)
 	apiRouter.Get("/reset", apiCfg.handlerReset)
+	apiRouter.Post("/users", apiCfg.handlerUsersCreate)
 	apiRouter.Post("/chirps", apiCfg.handlerChirpsCreate)
 	apiRouter.Get("/chirps", apiCfg.handlerChirpsRetrieve)
 	apiRouter.Get("/chirps/{chirpID}", apiCfg.handlerChirpsGet)
