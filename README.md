@@ -1,9 +1,10 @@
 # chirpy
 
-Web server that mimics "twitter" backend with:
+Web server that mimics a popular short-form-messaging platform backend with:
 * CRUD operations for messages
 * User auth with JWT
-* User login/logout
+* Refresh tokens as extra security layer on top of of JWT
+* User login/logout and relevant access permissions
 
 ## To run:
 
