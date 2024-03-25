@@ -33,7 +33,7 @@ Get Chrips:
 ### 2. Chirps Delete:
 ![image](https://github.com/CMaxK/chirpy/assets/71667581/d0f36bc1-4c6c-44bb-ac23-d7e97388e11c)
 
-### 3. Webhook for premium members:
+### 4. Webhook for premium members:
 Creation:
 ![image](https://github.com/CMaxK/chirpy/assets/71667581/a3ce59bd-a1a8-4f10-9288-a975ec0e040a)
 Upgrade using API Key:
