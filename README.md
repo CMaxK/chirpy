@@ -45,7 +45,7 @@ Premium feature (is_chirpy_red) activated:
 
 ### Further features such as:
 * not allowing duplicate user creation
-* Only user can dlete their own tweets
+* Only user can delete their own tweets
 * Admin panel with auto-increment visitor count
 * Admin revocation of user access
 * API health-check endpoint
